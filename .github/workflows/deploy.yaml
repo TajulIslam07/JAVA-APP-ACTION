@@ -19,9 +19,9 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.AWS_SSH_KEY }}
 
-      - name: Deploy Main.class
-        run: |
-          scp -o StrictHostKeyChecking=no "/media/tajul/New Volume/OSTAD/JAVA-APP-ACTION/Main.class" ubuntu@${{ secrets.AWS_SERVER_IP }}:/home/ubuntu/
+      # - name: Deploy Main.class
+      #   run: |
+      #     scp -o StrictHostKeyChecking=no Main.class" ubuntu@${{ secrets.AWS_SERVER_IP }}:/home/ubuntu/
 
       - name: Restart backend service
         run: |
