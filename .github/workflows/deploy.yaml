@@ -19,20 +19,9 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.AWS_SSH_KEY }}
 
-      # - name: Deploy Main.class
-      #   run: |
-      #     scp -o StrictHostKeyChecking=no Main.class" ubuntu@${{ secrets.AWS_SERVER_IP }}:/home/ubuntu/
-
       - name: Restart backend service
         run: |
-          ssh -i  ubuntu@${{ secrets.AWS_SERVER_IP }} "
-            sudo systemctl daemon-reload &&
-            sudo systemctl restart java-backend.service &&
-            sudo systemctl status java-backend.service
-          "
-
-      # - name: Test backend endpoint
-      #   run: |
-      #     ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.AWS_SERVER_IP }} "
-      #       curl -s http://localhost:5050/hello
-      #     "
+          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.AWS_SERVER_IP }} \
+          "sudo systemctl daemon-reload &&
+           sudo systemctl restart java-backend.service &&
+           sudo systemctl status java-backend.service"
