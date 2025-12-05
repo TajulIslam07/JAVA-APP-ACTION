@@ -1,0 +1,38 @@
+name: Deploy Java Backend
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  deploy:
+    runs-on: module5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.1
+        with:
+          ssh-private-key: ${{ secrets.AWS_SSH_KEY }}
+
+      - name: Deploy Main.class
+        run: |
+          scp -o StrictHostKeyChecking=no Main.class ubuntu@${{ secrets.AWS_SERVER_IP }}:/home/ubuntu/
+
+      - name: Restart backend service
+        run: |
+          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.AWS_SERVER_IP }} "
+            sudo systemctl daemon-reload &&
+            sudo systemctl restart java-backend.service &&
+            sudo systemctl status java-backend.service
+          "
+
+      # - name: Test backend endpoint
+      #   run: |
+      #     ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.AWS_SERVER_IP }} "
+      #       curl -s http://localhost:5050/hello
+      #     "
